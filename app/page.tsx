@@ -1,9 +1,21 @@
-import Image from "next/image";
+import React from "react";
+import { UserButton } from "@clerk/nextjs";
+import { ModeToggle } from "@/components/mode-toggle";
 
-export default function Home() {
+const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between text-3xl text-indigo-500">
-      <p>hi</p>
-    </main>
+    <div className=" ">
+      <header className="bg-indigo-500 py-2 ">
+        <div className="container flex items-center justify-between ">
+          <h1 className="text-white text-2xl font-bold">Chat Application</h1>
+          <div className="flex items-center  gap-x-6 ">
+            <UserButton afterSignOutUrl="/" />
+            <ModeToggle />
+          </div>
+        </div>
+      </header>
+    </div>
   );
-}
+};
+
+export default Home;
