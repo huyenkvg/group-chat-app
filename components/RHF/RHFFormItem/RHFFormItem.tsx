@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
+
+import { FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import React from "react";
 
 export type TRHFFormItemProps = {

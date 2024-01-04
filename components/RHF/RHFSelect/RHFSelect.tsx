@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 
-import { FormControl, FormField } from '@/components/shadcn/ui/form';
+import { FormControl, FormField } from '@/components/ui/form';
 import { useFormContext } from 'react-hook-form';
 import {
   Select,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shadcn/ui/select';
+} from '@/components/ui/select';
 import { RHFFormItem } from '../RHFFormItem';
 
 export type TRHFSelectOption = {
