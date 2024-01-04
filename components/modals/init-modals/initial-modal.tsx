@@ -16,12 +16,10 @@ const formSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required.",
   }),
-  imageUrl: z.string().min(1, {
-    message: "Image is required.",
-  }),
+  imageUrl: z.string(),
 });
 
-export const InitialModal = () => {
+const InitialModal = () => {
   const router = useRouter();
 
   const methods = useForm({
@@ -35,21 +33,37 @@ export const InitialModal = () => {
   const isLoading = methods.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // TODO: Create server
-    console.log("values", values);
+    try {
+      const response = await fetch("/api/servers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create server");
+      }
+      methods.reset();
+      console.log("Server created successfully");
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error creating server:", error);
+    }
   };
 
   return (
     <CustomModal
       title="Customize your server"
       description="Give your server a personality with a name and an image. You can always change it later.."
-      actions={<Button type="submit">Submit</Button>}
       open={true}
     >
       <Form {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
           <div className="space-y-8 px-6">
-            <div className="flex items-center justify-center text-center">
+            <div className="flex flex-col items-leftr">
               <RHFFormItem>
                 <InputField
                   name="name"
@@ -76,7 +90,7 @@ export const InitialModal = () => {
           </DialogFooter>
         </form>
       </Form>
-      <p>Custom modal content.</p>
     </CustomModal>
   );
 };
+export default InitialModal;

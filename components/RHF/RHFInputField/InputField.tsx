@@ -38,6 +38,7 @@ export default function InputField({
         const combinedInputProps: InputProps = {
           ...field,
           ...inputProps,
+          ... (invalid ? { className: 'border-red-500' } : {}),
         };
         return (
           <RHFFormItem

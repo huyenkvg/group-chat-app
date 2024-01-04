@@ -40,7 +40,7 @@ function RHFFormItem({
       {description && (
         <FormDescription
           data-testid={`${testId}__description`}
-          className="pt-2 text-normal text-gray-500"
+          className="font-thin text-gray-500"
           {...descriptionProps}
         >
           {description}
