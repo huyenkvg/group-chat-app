@@ -9,6 +9,8 @@ import { Form, FormField, FormItem } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import CustomModal from "../custom-modal";
 import { Button } from "@/components/ui/button";
+import { RHFFormItem } from "@/components/RHF/RHFFormItem";
+import { InputField } from "@/components/RHF/RHFInputField";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -48,17 +50,24 @@ export const InitialModal = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
           <div className="space-y-8 px-6">
             <div className="flex items-center justify-center text-center">
-              <FormField
-                control={methods.control}
-                name="imageUrl"
-                render={({ field }) => <FormItem>foo</FormItem>}
-              />
+              <RHFFormItem>
+                <InputField
+                  name="name"
+                  formLabel="Name"
+                  description="your name to display in channel"
+                />
+              </RHFFormItem>
+              <RHFFormItem>
+                <InputField
+                  name="imageUrl"
+                  formLabel="Image"
+                  inputProps={{
+                    type: "file",
+                  }}
+                  description="your avatar"
+                />
+              </RHFFormItem>
             </div>
-            <FormField
-              control={methods.control}
-              name="name"
-              render={({ field }) => <FormItem>bar</FormItem>}
-            />
           </div>
           <DialogFooter className="bg-gray-100 px-6 py-4">
             <Button variant="outline" disabled={isLoading}>
