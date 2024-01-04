@@ -15,7 +15,7 @@ export async function initialProfile(): Promise<{
   }
   const profile = await db.profile.findUnique({
     where: {
-      id: user.id,
+      userId: user.id,
     },
   });
   if (!profile) {
