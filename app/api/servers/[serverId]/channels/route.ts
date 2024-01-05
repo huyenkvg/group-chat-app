@@ -25,30 +25,51 @@ export async function POST(
       return new NextResponse("Name cannot be 'general'", { status: 400 });
     }
 
-    const server = await db.server.update({
+    const existingServer = await db.server.findUnique({
+      where: { id: serverId },
+    });
+
+    if (!existingServer) {
+      return NextResponse.json(
+        { message: "Server not found" },
+        { status: 404 }
+      );
+    }
+
+    const existingMember = await db.member.findFirst({
       where: {
-        id: serverId,
-        members: {
-          some: {
-            profileId: profile.id,
-            role: {
-              in: [MemberRole.ADMIN, MemberRole.MODERATOR],
-            },
-          },
-        },
-      },
-      data: {
-        channels: {
-          create: {
-            profileId: profile.id,
-            name,
-            type,
-          },
+        serverId: serverId,
+        profileId: profile.id,
+        role: {
+          in: [MemberRole.ADMIN, MemberRole.MODERATOR],
         },
       },
     });
 
-    return NextResponse.json(server);
+    if (!existingMember) {
+      return NextResponse.json(
+        {
+          message: "Forbidden: You don't have permission to create channel.",
+        },
+        { status: 403 }
+      );
+    }
+    const updatedServer = await db.server.update({
+      where: { id: serverId },
+      data: {
+        channels: {
+          create: [
+            {
+              profileId: profile.id,
+              name,
+              type,
+            },
+          ],
+        },
+      },
+    });
+
+    return NextResponse.json(updatedServer);
   } catch (error) {
     console.log("CHANNELS_POST", error);
     return new NextResponse("Internal Error", { status: 500 });
