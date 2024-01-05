@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-import { FormControl, FormField } from '@/components/ui/form';
-import { useFormContext } from 'react-hook-form';
+import { FormControl, FormField } from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { RHFFormItem } from '../RHFFormItem';
+} from "@/components/ui/select";
+import { RHFFormItem } from "../RHFFormItem";
 
 export type TRHFSelectOption = {
   label: string;
@@ -24,7 +24,7 @@ export type TRHFSelectProps = {
   required?: boolean;
   placeholder?: string;
   description?: ReactNode;
-  formLabel?: ReactNode;
+  formLabel?: String;
   formItemProps?: React.HTMLAttributes<HTMLDivElement>;
   formLabelProps?: React.HTMLAttributes<HTMLLabelElement>;
   formMessageProps?: React.HTMLAttributes<HTMLParagraphElement>;
@@ -34,10 +34,10 @@ export type TRHFSelectProps = {
 export default function RHFSelect({
   name,
   options = [],
-  required,
-  placeholder = '---',
-  description = '',
-  formLabel = '',
+  required = false,
+  placeholder = "-",
+  description = "",
+  formLabel = "",
   formItemProps = {},
   formLabelProps = {},
   formMessageProps = {},
@@ -52,6 +52,7 @@ export default function RHFSelect({
       name={name}
       render={({ field, fieldState: { invalid } }) => (
         <RHFFormItem
+          formLabel={formLabel}
           description={description}
           formItemProps={formItemProps}
           formLabelProps={formLabelProps}
@@ -60,16 +61,11 @@ export default function RHFSelect({
         >
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
-              <SelectTrigger
-                formLabel={formLabel}
-                required={required}
-                isError={invalid}
-              >
+              <SelectTrigger>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              <SelectItem value={undefined}>{placeholder}</SelectItem>
               {options.map(({ label, value }) => (
                 <SelectItem key={value} value={value}>
                   {label}

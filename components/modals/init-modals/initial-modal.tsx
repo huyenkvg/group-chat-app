@@ -30,7 +30,7 @@ const InitialModal = () => {
     },
   });
 
-  const isLoading = methods.formState.isSubmitting;
+  const { isSubmitting } = methods.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -64,27 +64,23 @@ const InitialModal = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-8">
           <div className="space-y-8 px-6">
             <div className="flex flex-col items-leftr">
-              <RHFFormItem>
-                <InputField
-                  name="name"
-                  formLabel="Name"
-                  description="your name to display in channel"
-                />
-              </RHFFormItem>
-              <RHFFormItem>
-                <InputField
-                  name="imageUrl"
-                  formLabel="Image"
-                  inputProps={{
-                    type: "file",
-                  }}
-                  description="your avatar"
-                />
-              </RHFFormItem>
+              <InputField
+                name="name"
+                formLabel="Name"
+                description="your name to display in channel"
+              />
+              <InputField
+                name="imageUrl"
+                formLabel="Image"
+                inputProps={{
+                  type: "file",
+                }}
+                description="your avatar"
+              />
             </div>
           </div>
           <DialogFooter className="bg-gray-100 px-6 py-4">
-            <Button variant="outline" disabled={isLoading}>
+            <Button variant="outline" disabled={isSubmitting}>
               Create
             </Button>
           </DialogFooter>

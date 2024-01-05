@@ -16,7 +16,10 @@ const InviteCodePage = async ({
   const profile = await currentProfile();
 
   if (!profile) {
-    return redirectToSignIn({ returnBackUrl: `/invite/${inviteCode}` });
+    // TODO: bring localhost 3000 to ENV named NEXT_PUBLIC_URL
+    return redirectToSignIn({
+      returnBackUrl: `http://localhost:3000/invite/${inviteCode}`,
+    });
   }
 
   if (!inviteCode) {
@@ -60,7 +63,7 @@ const InviteCodePage = async ({
     console.error("[FAIL_JOIN_SERVER]", error);
   }
 
-  return null;
+  return '/';
 };
 
 export default InviteCodePage;
