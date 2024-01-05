@@ -105,7 +105,6 @@ const ServerIdLayout = async ({
   if (!server) {
     return redirect("/");
   }
-  console.log("server", server);
 
   return (
     <div className="h-full">
