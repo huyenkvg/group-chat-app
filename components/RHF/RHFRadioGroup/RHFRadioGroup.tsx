@@ -48,7 +48,7 @@ export default function RHFRadioGroup({
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
+      render={({ field }: any) => (
         <RHFFormItem
           formLabel={formLabel}
           description={description}
