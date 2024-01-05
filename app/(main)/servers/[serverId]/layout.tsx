@@ -81,7 +81,10 @@ const ServerIdLayout = async ({
 }) => {
   const profile = await currentProfile();
   if (!profile) {
-    return redirectToSignIn();
+    // TODO: bring localhost 3000 to ENV named NEXT_PUBLIC_URL
+    return redirectToSignIn({
+      returnBackUrl: `http://localhost:3000/servers/${params.serverId}`,
+    });
   }
 
   const server = await db.server.findUnique({
@@ -102,17 +105,23 @@ const ServerIdLayout = async ({
       },
     },
   });
+  const channel = await db.channel.findMany({
+    where: {
+      serverId: params.serverId,
+    },
+  });
+  console.log('channel', channel)
 
   if (!server) {
     return redirect("/");
   }
-
+console.log('server', server)
   return (
     <div className="h-full">
       <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <ChannelList channels={server.channels as IChannel[]} />{" "}
-          <CreateChannelModal />
+          <CreateChannelModal server={server} />
           <DMList members={server.members as IMember[]} />
           <div className="flex-shrink-0 flex bg-gray-700 p-2">
             <div className="flex items-center justify-between w-full">

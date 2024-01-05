@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ChannelType } from "@prisma/client";
+import { ChannelType, Server } from "@prisma/client";
 import { RHFSelect } from "@/components/RHF/RHFSelect";
 
 const formSchema = z.object({
@@ -33,11 +33,7 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export const CreateChannelModal = ({
-  server,
-}: {
-  server: Partial<IServer>;
-}) => {
+export const CreateChannelModal = ({ server }: { server: Server }) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
