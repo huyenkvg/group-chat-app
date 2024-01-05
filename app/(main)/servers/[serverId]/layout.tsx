@@ -110,12 +110,10 @@ const ServerIdLayout = async ({
       serverId: params.serverId,
     },
   });
-  console.log('channel', channel)
 
   if (!server) {
     return redirect("/");
   }
-console.log('server', server)
   return (
     <div className="h-full">
       <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0">
