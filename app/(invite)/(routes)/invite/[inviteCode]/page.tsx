@@ -10,20 +10,22 @@ interface InviteCodePageProps {
   };
 }
 
-const InviteCodePage = async ({ params }: InviteCodePageProps) => {
+const InviteCodePage = async ({
+  params: { inviteCode },
+}: InviteCodePageProps) => {
   const profile = await currentProfile();
 
   if (!profile) {
-    return redirectToSignIn();
+    return redirectToSignIn({ returnBackUrl: `/invite/${inviteCode}` });
   }
 
-  if (!params.inviteCode) {
+  if (!inviteCode) {
     return redirect("/");
   }
-
-  const existingServer = await db.server.findFirst({
+  // The user is already a member of the server
+  const existingServer = await db.server.findUnique({
     where: {
-      inviteCode: params.inviteCode,
+      inviteCode,
       members: {
         some: {
           profileId: profile.id,
@@ -31,28 +33,31 @@ const InviteCodePage = async ({ params }: InviteCodePageProps) => {
       },
     },
   });
-
+  // Redirect him/her to the existed server page
   if (existingServer) {
     return redirect(`/servers/${existingServer.id}`);
   }
-
-  const server = await db.server.update({
-    where: {
-      inviteCode: params.inviteCode,
-    },
-    data: {
-      members: {
-        create: [
-          {
-            profileId: profile.id,
-          },
-        ],
+  try {
+    const server = await db.server.update({
+      where: {
+        inviteCode: inviteCode,
       },
-    },
-  });
+      data: {
+        members: {
+          create: [
+            {
+              profileId: profile.id,
+            },
+          ],
+        },
+      },
+    });
 
-  if (server) {
-    return redirect(`/servers/${server.id}`);
+    if (server) {
+      return redirect(`/servers/${server.id}`);
+    }
+  } catch (error) {
+    console.error("[FAIL_JOIN_SERVER]", error);
   }
 
   return null;
