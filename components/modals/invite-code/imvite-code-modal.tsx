@@ -1,5 +1,5 @@
 "use client";
-import { Check, Copy,  RefreshCw,  UserPlus } from "lucide-react";
+import { Check, Copy, RefreshCw, UserPlus } from "lucide-react";
 import { useState } from "react";
 
 import { Label } from "@/components/ui/label";
@@ -12,8 +12,11 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
+  const origin =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
+  const [inviteUrl, setInviteUrl] = useState(`${origin}/invite/${server?.inviteCode}`);
 
   const onCopy = () => {
     navigator.clipboard.writeText(inviteUrl);
@@ -30,8 +33,8 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
       const response = await fetch(`/api/servers/${server?.id}/invite-code`, {
         method: "PATCH",
       });
-
-      //   ("invite", { server: response.data });
+      const data = await response.json();
+      setInviteUrl(`${origin}/invite/${data?.inviteCode}`);
     } catch (error) {
       console.log(error);
     } finally {
@@ -48,7 +51,8 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
         onClick={() => {
           setOpen(true);
         }}
-      >Invite
+      >
+        Invite
         <UserPlus className="w-4 h-4 ml-2" />
       </Button>
       <CustomModal
@@ -86,8 +90,10 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
             size="sm"
             className="text-xs text-zinc-500 mt-4"
           >
-            Generate a new link
-            <RefreshCw className="w-4 h-4 ml-2" />
+            Rregenerate invite link
+            <RefreshCw
+              className="w-4 h-4 ml-2"
+            />
           </Button>
         </div>
       </CustomModal>

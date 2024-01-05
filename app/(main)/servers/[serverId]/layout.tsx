@@ -48,7 +48,6 @@ const ServerIdLayout = async ({
   params: { serverId: string };
 }) => {
   const profile = await currentProfile();
-
   if (!profile) {
     return redirectToSignIn();
   }
@@ -86,7 +85,10 @@ const ServerIdLayout = async ({
               <span className="text-gray-300 text-sm">
                 Members: {server.members.length}
               </span>
-              <InviteModal server={server as IServer} />
+              <InviteModal
+                server={server as IServer}
+           
+              />
             </div>
           </div>
         </div>
