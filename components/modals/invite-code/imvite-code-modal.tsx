@@ -1,5 +1,5 @@
 "use client";
-import { Check, Copy, RefreshCw } from "lucide-react";
+import { Check, Copy,  RefreshCw,  UserPlus } from "lucide-react";
 import { useState } from "react";
 
 import { Label } from "@/components/ui/label";
@@ -42,15 +42,14 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
   return (
     <>
       <Button
-        variant="default"
+        variant="secondary"
         size="sm"
-        className="text-xs text-zinc-500 mt-4"
+        className="text-xs text-zinc-500"
         onClick={() => {
           setOpen(true);
         }}
-      >
-        Invite People
-        <RefreshCw className="w-4 h-4 ml-2" />
+      >Invite
+        <UserPlus className="w-4 h-4 ml-2" />
       </Button>
       <CustomModal
         title="Invite People"
