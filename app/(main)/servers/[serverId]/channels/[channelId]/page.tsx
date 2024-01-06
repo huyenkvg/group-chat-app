@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { IChannel } from "@/typing/model-types";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
 import { MessageInput } from "@/components/chat-components/message-input";
+import { ChatList } from "@/components/chat-components/chat-list";
 
 interface ChannelIdPageProps {
   params: {
@@ -62,18 +63,31 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
       <ChannelHeader channel={channel as IChannel} />
+      <section className="flex-1 overflow-y-auto">
+        <ChatList
+          member={member}
+          name={channel.name}
+          chatId={channel.id}
+          socketQuery={{
+            channelId: channel.id,
+            serverId: channel.serverId,
+          }}
+          paramKey="channelId"
+          paramValue={channel.id}
+          isDirectMessage={false}
+        />
+      </section>
       <section className="h-fit absolute bottom-0 right-0 left-0">
         <MessageInput
           name={channel.name}
           type="channel"
-          apiUrl="/api/socket/messages"
+          apiUrl="/api/socket/messages"          
           query={{
             channelId: channel.id,
             serverId: channel.serverId,
           }}
         />
       </section>
-      {/* TODO: create channel UI */}
     </div>
   );
 };
