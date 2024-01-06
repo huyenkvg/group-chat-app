@@ -53,7 +53,6 @@ export const SocketProvider = ({
 
   return (
     <SocketContext.Provider value={{ socket, isConnected }}>
-      {isConnected && <div className="text-green-500 font-bold">Connected</div>}
       {children}
     </SocketContext.Provider>
   )
