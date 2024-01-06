@@ -80,8 +80,6 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
       <section className="h-fit absolute bottom-0 right-0 left-0">
         <MessageInput
           name={channel.name}
-          type="channel"
-          apiUrl="/api/socket/messages"          
           query={{
             channelId: channel.id,
             serverId: channel.serverId,

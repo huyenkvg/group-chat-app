@@ -4,28 +4,25 @@ import * as z from "zod";
 // import qs from "query-string";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Paperclip, Plus, Send, SendHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Paperclip, SendHorizontal } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useState } from "react";
+import queryString from "query-string";
 
 interface MessageInputProps {
-  apiUrl: string;
   query: Record<string, any>;
   name: string;
-  type: "conversation" | "channel";
 }
 
 const formSchema = z.object({
   content: z.string().min(1),
 });
 
-export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) => {
-
+export const MessageInput = ({ query, name }: MessageInputProps) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -33,6 +30,8 @@ export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) =
   }, []);
 
   const router = useRouter();
+  const pathname = usePathname();
+  const isDirectMessage = pathname?.includes("/members/");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,10 +43,27 @@ export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) =
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values);
-      // TODO: Integration send message to server
+    try {
+      const url = queryString.stringifyUrl({
+        url: isDirectMessage
+          ? "/api/socket/direct-messages"
+          : "/api/socket/messages",
+        query,
+      });
+
+      await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       form.reset();
       router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!isMounted) {
@@ -68,7 +84,7 @@ export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) =
                       disabled={isLoading}
                       className="px-4 py-2 w-full bg-transparent border-none text-black dark:text-zinc-200"
                       placeholder={`Message to ${
-                        type === "conversation" ? "@" + name : "#" + name
+                        isDirectMessage ? "@" + name : "#" + name
                       }`}
                       {...field}
                     />
