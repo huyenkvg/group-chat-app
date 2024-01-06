@@ -38,7 +38,7 @@ const ChannelHeader = ({ channel }: { channel: IChannel }) => {
   }
   return (
     <div className="bg-gray-800 text-white py-4 px-6 flex flex-row items-center justify-between">
-      <h1 className="text-xl font-bold">Channel Name</h1>
+      <h1 className="text-xl font-bold"># {channel.name}</h1>
     </div>
   );
 };
