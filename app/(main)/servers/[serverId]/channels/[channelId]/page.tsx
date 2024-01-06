@@ -63,7 +63,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
       <ChannelHeader channel={channel as IChannel} />
-      <section className="flex-1 overflow-y-auto">
+      <section className="flex-1 overflow-y-scroll">
         <ChatList
           member={member}
           name={channel.name}
@@ -77,7 +77,8 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
           isDirectMessage={false}
         />
       </section>
-      <section className="h-fit absolute bottom-0 right-0 left-0">
+      <div className="w-full pt-[7.5rem] bg-transparent"/>
+      <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
         <MessageInput
           name={channel.name}
           query={{
@@ -85,7 +86,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
             serverId: channel.serverId,
           }}
         />
-      </section>
+      </div>
     </div>
   );
 };
