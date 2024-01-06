@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useEffect, useState } from "react";
 
 interface MessageInputProps {
   apiUrl: string;
@@ -24,6 +25,13 @@ const formSchema = z.object({
 });
 
 export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) => {
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,6 +50,9 @@ export const MessageInput = ({ apiUrl, query, name, type }: MessageInputProps) =
       router.refresh();
   };
 
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
