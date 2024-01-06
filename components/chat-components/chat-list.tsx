@@ -6,7 +6,7 @@ import { Loader2, ServerCrash } from "lucide-react";
 
 import { useChatQuery } from "@/hooks/use-chat-query";
 import dayjs from "dayjs";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import ChatMessage from "./chat-message";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -30,6 +30,7 @@ export const ChatList = ({
   name,
   chatId,
   paramKey,
+  member,
   paramValue,
   isDirectMessage = false,
 }: ChatListProps) => {
@@ -90,21 +91,21 @@ export const ChatList = ({
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages?.map((group: any, index: number) => (
           <Fragment key={index}>
-            {group.items.map((message: MessageWithMemberWithProfile) => (
-              <div key={message.id} className="flex flex-row">
-                <Avatar>
-                  <AvatarImage src={message.member.profile.imageUrl} />
-                </Avatar>
-                <div className="flex flex-col">
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    {dayjs(message.createdAt).format(DATE_FORMAT)}
-                  </p>
-                  <p>{message.member.profile.name}</p>
-                  <p>{message.content}</p>
-                </div>
-              </div>
-            ))}
-          </Fragment>
+          {group.items.map((message: MessageWithMemberWithProfile) => (
+            <ChatMessage
+              key={message.id}
+              id={message.id}
+              currentMember={member}
+              member={message.member}
+              content={message.content}
+              fileUrl={message.fileUrl}
+              deleted={message.deleted}
+              timestamp={dayjs(new Date(message.createdAt), DATE_FORMAT)}
+              isUpdated={message.updatedAt !== message.createdAt}
+            
+            />
+          ))}
+        </Fragment>
         ))}
       </div>
       <div ref={bottomRef} />
