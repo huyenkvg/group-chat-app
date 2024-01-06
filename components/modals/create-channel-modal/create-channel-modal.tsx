@@ -106,7 +106,7 @@ export const CreateChannelModal = ({ server }: { server: Server }) => {
                   options={[
                     { label: "Text", value: ChannelType.TEXT },
                     { label: "Voice", value: ChannelType.AUDIO },
-                    { label: "Video", value: ChannelType.VIDIEO },
+                    { label: "Video", value: ChannelType.VIDEO },
                   ]}
                 />
               </div>

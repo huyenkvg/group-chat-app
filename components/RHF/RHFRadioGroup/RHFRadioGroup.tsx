@@ -1,6 +1,6 @@
 "use client";
 
-import type { InputProps } from "@/components/shadcn/ui/input";
+
 import type { ReactNode } from "react";
 
 import {
@@ -8,10 +8,11 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/shadcn/ui/form";
+} from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
-import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { RHFFormItem } from "../RHFFormItem";
+import type { InputProps } from "@/components/ui/input";
 
 export type TRHFRadioGroupOption = {
   label: string;
