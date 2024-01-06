@@ -2,8 +2,8 @@ import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { InviteModal } from "@/components/modals/invite-code/imvite-code-modal";
 import { IChannel } from "@/typing/model-types";
+import { SocketIndicator } from "@/components/providers/socket-indicator";
 
 interface ChannelIdPageProps {
   params: {
@@ -37,8 +37,9 @@ const ChannelHeader = ({ channel }: { channel: IChannel }) => {
     return null;
   }
   return (
-    <div className="bg-gray-800 text-white py-4 px-6 flex flex-row items-center justify-between">
+    <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
       <h1 className="text-xl font-bold"># {channel.name}</h1>
+      <SocketIndicator />
     </div>
   );
 };
@@ -58,7 +59,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   }
 
   return (
-    <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+    <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full">
       <ChannelHeader channel={channel as IChannel} />
       {/* TODO: create channel UI */}
     </div>
