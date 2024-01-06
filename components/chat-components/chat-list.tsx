@@ -8,6 +8,7 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 import dayjs from "dayjs";
 import ChatMessage from "./chat-message";
 import { useChatSocket } from "@/hooks/use-chat-socket";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -62,7 +63,13 @@ export const ChatList = ({
     // Same as above, but for when a message is updated.
     updateKey: `chat:${chatId}:messages:update`,
   });
-
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchOlderMessages,
+    shouldLoadMore: !isFetchingOlderMessages && !!hasPreviousMessages,
+    count: data?.pages?.[0]?.items?.length ?? 0,
+  })
 
   if (status === "error") {
     return (
