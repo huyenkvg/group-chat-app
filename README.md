@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Group Chat App
+
+![Group Chat App Logo](path/to/your/logo.png)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Configuration](#configuration)
+- [Database](#database)
+- [Authentication](#authentication)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
+
+## Introduction
+
+The Group Chat App is a real-time messaging application that allows users to create and join chat groups, exchange messages, and share multimedia content. This README provides an overview of the app, its features, and instructions for getting started.
+
+## Features
+
+- **Real-Time Messaging:** Instant messaging using WebSocket for real-time communication.
+- **User Authentication:** Secure user authentication with Clerk to ensure privacy and control access.
+- **Server/Channel:** Each User has their own server, having full ability to create-channels, invite people, and chat.
+- **Message Persistence:** Storage of chat messages for a complete message history.
+- **Notifications:** ...
+- **Multimedia Support:** Share images, files, and links within chat groups.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js and npm installed on your machine.
+- MySQL database hosted on Digital Ocean.
+- Prisma for ORM installed.
+- Clerk account for authentication.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### updating...
