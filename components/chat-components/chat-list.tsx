@@ -7,6 +7,7 @@ import { Loader2, ServerCrash } from "lucide-react";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import dayjs from "dayjs";
 import ChatMessage from "./chat-message";
+import { useChatSocket } from "@/hooks/use-chat-socket";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -35,8 +36,9 @@ export const ChatList = ({
   isDirectMessage = false,
 }: ChatListProps) => {
   const apiUrl = isDirectMessage ? "/api/direct-messages" : "/api/messages";
-
-  const queryKey = `chat:${chatId}`;
+  
+  // This key allow the ServerSocket io to emit a message to this chat to update the chat list
+  const queryKey = `chat:${chatId}`; 
 
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
@@ -52,6 +54,15 @@ export const ChatList = ({
     paramKey,
     paramValue,
   });
+
+  useChatSocket({
+    queryKey,
+    // This key allow the ServerSocket io to emit a message after a message is created, and we can listen to it to update the chat list.
+    addKey: `chat:${chatId}:messages`, 
+    // Same as above, but for when a message is updated.
+    updateKey: `chat:${chatId}:messages:update`,
+  });
+
 
   if (status === "error") {
     return (
@@ -91,21 +102,20 @@ export const ChatList = ({
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages?.map((group: any, index: number) => (
           <Fragment key={index}>
-          {group.items.map((message: MessageWithMemberWithProfile) => (
-            <ChatMessage
-              key={message.id}
-              id={message.id}
-              currentMember={member}
-              member={message.member}
-              content={message.content}
-              fileUrl={message.fileUrl}
-              deleted={message.deleted}
-              timestamp={dayjs(new Date(message.createdAt), DATE_FORMAT)}
-              isUpdated={message.updatedAt !== message.createdAt}
-            
-            />
-          ))}
-        </Fragment>
+            {group.items.map((message: MessageWithMemberWithProfile) => (
+              <ChatMessage
+                key={message.id}
+                id={message.id}
+                currentMember={member}
+                member={message.member}
+                content={message.content}
+                fileUrl={message.fileUrl}
+                deleted={message.deleted}
+                timestamp={dayjs(new Date(message.createdAt), DATE_FORMAT)}
+                isUpdated={message.updatedAt !== message.createdAt}
+              />
+            ))}
+          </Fragment>
         ))}
       </div>
       <div ref={bottomRef} />
