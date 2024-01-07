@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { IServer } from "@/typing/model-types";
 import CustomModal from "../custom-modal";
+import { Server } from "@prisma/client";
 
-export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
+export const InviteModal = ({ server }: { server: Server }) => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
