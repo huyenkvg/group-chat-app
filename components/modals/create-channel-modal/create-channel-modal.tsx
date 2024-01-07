@@ -1,11 +1,8 @@
 "use client";
-import { Check, Copy, Plus, RefreshCw, UserPlus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { IServer } from "@/typing/model-types";
 import CustomModal from "../custom-modal";
 import { Form } from "@/components/ui/form";
 import { InputField } from "@/components/RHF/RHFInputField";
@@ -31,9 +28,16 @@ const formSchema = z.object({
         "Only letters, numbers, and dashes are allowed. Must start with a letter.",
     }),
   type: z.nativeEnum(ChannelType),
+  // isPrivate: z.boolean(),
 });
 
-export const CreateChannelModal = ({ server }: { server: Server }) => {
+export const CreateChannelModal = ({
+  server,
+  isOwner = false,
+}: {
+  server: Server;
+  isOwner?: boolean;
+}) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -43,6 +47,7 @@ export const CreateChannelModal = ({ server }: { server: Server }) => {
     defaultValues: {
       name: "",
       type: ChannelType.TEXT,
+      // isPrivate: true,
     },
     mode: "onChange",
   });
@@ -70,17 +75,19 @@ export const CreateChannelModal = ({ server }: { server: Server }) => {
 
   return (
     <>
-      <Button
-        variant="default"
-        size="sm"
-        className="text-xs text-zinc-500 hover:text-zinc-100 rounded-none"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Create channel
-        <Plus className="w-4 h-4 ml-2" />
-      </Button>
+      {isOwner && (
+        <Button
+          variant="default"
+          size="sm"
+          className="text-xs text-zinc-500 hover:text-zinc-100 rounded-none"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Create channel
+          <Plus className="w-4 h-4 ml-2" />
+        </Button>
+      )}
       <CustomModal
         title="Create New Channel"
         open={open}
