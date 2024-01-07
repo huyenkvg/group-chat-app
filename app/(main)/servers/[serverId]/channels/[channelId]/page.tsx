@@ -2,10 +2,10 @@ import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { IChannel } from "@/typing/model-types";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
 import { MessageInput } from "@/components/chat-components/message-input";
 import { ChatList } from "@/components/chat-components/chat-list";
+import { Channel } from "@prisma/client";
 
 interface ChannelIdPageProps {
   params: {
@@ -34,7 +34,7 @@ const getMember = async (serverId: string, profileId: string) => {
   });
 };
 
-const ChannelHeader = ({ channel }: { channel: IChannel }) => {
+const ChannelHeader = ({ channel }: { channel: Channel }) => {
   if (!channel) {
     return null;
   }
@@ -62,7 +62,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
 
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
-      <ChannelHeader channel={channel as IChannel} />
+      <ChannelHeader channel={channel} />
       <section className="flex-1 overflow-y-scroll">
         <ChatList
           member={member}
