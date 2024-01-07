@@ -2,10 +2,11 @@ import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { IChannel } from "@/typing/model-types";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
 import { MessageInput } from "@/components/chat-components/message-input";
 import { ChatList } from "@/components/chat-components/chat-list";
+import { Channel, ChannelType } from "@prisma/client";
+import { MediaRoom } from "@/components/media-room";
 
 interface ChannelIdPageProps {
   params: {
@@ -34,7 +35,7 @@ const getMember = async (serverId: string, profileId: string) => {
   });
 };
 
-const ChannelHeader = ({ channel }: { channel: IChannel }) => {
+const ChannelHeader = ({ channel }: { channel: Channel }) => {
   if (!channel) {
     return null;
   }
@@ -59,34 +60,43 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   if (!channel || !member) {
     redirect("/");
   }
-
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
-      <ChannelHeader channel={channel as IChannel} />
-      <section className="flex-1 overflow-y-scroll">
-        <ChatList
-          member={member}
-          name={channel.name}
-          chatId={channel.id}
-          socketQuery={{
-            channelId: channel.id,
-            serverId: channel.serverId,
-          }}
-          paramKey="channelId"
-          paramValue={channel.id}
-          isDirectMessage={false}
-        />
-      </section>
-      <div className="w-full pt-[7.5rem] bg-transparent"/>
-      <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
-        <MessageInput
-          name={channel.name}
-          query={{
-            channelId: channel.id,
-            serverId: channel.serverId,
-          }}
-        />
-      </div>
+      <ChannelHeader channel={channel} />
+      {channel?.type === ChannelType.TEXT && (
+        <>
+          <section className="flex-1 overflow-y-scroll">
+            <ChatList
+              member={member}
+              name={channel.name}
+              chatId={channel.id}
+              socketQuery={{
+                channelId: channel.id,
+                serverId: channel.serverId,
+              }}
+              paramKey="channelId"
+              paramValue={channel.id}
+              isDirectMessage={false}
+            />
+          </section>
+          <div className="w-full pt-[7.5rem] bg-transparent" />
+          <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
+            <MessageInput
+              name={channel.name}
+              query={{
+                channelId: channel.id,
+                serverId: channel.serverId,
+              }}
+            />
+          </div>
+        </>
+      )}
+      {channel?.type === ChannelType.AUDIO && (
+        <MediaRoom chatId={channel.id} video={false} audio={true} />
+      )}
+      {channel?.type === ChannelType.VIDEO && (
+        <MediaRoom chatId={channel.id} video={true} audio={true} />
+      )}
     </div>
   );
 };
