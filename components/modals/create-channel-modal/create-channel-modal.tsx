@@ -1,4 +1,5 @@
 "use client";
+
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -62,12 +63,14 @@ export const CreateChannelModal = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
+      }).then(async (res) => {
+        if (!response.ok) {
+          throw new Error("Failed to create channel");
+        }
+        const data = await res.json();
+        router.push(`/servers/${server?.id}`);
+        return res;
       });
-      if (!response.ok) {
-        throw new Error("Failed to create channel");
-      }
-      const data = await response.json();
-      router.push(`/servers/${server?.id}/channels/${data.id}`);
     } catch (error) {
       console.log(error);
     }
