@@ -74,7 +74,6 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
                 channelId: channel.id,
                 serverId: channel.serverId,
               }}
-              paramKey="channelId"
               paramValue={channel.id}
               isDirectMessage={false}
             />
@@ -82,6 +81,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
           <div className="w-full pt-[7.5rem] bg-transparent" />
           <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
             <MessageInput
+              isDirectMessage={false}
               name={channel.name}
               query={{
                 channelId: channel.id,

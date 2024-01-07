@@ -18,12 +18,14 @@ type MessageWithMemberWithProfile = Message & {
   };
 };
 
+export type ParamKey = "channelId" | "conversationId";
+export type APIURL = "/api/messages" | "/api/direct-messages";
+
 interface ChatListProps {
   name: string;
   member: Member;
   chatId: string;
   socketQuery: Record<string, string>;
-  paramKey: "channelId" | "conversationId";
   paramValue: string;
   isDirectMessage?: boolean;
 }
@@ -31,15 +33,17 @@ interface ChatListProps {
 export const ChatList = ({
   name,
   chatId,
-  paramKey,
   member,
   paramValue,
   isDirectMessage = false,
 }: ChatListProps) => {
-  const apiUrl = isDirectMessage ? "/api/direct-messages" : "/api/messages";
-  
+  const apiUrl: APIURL = isDirectMessage
+    ? "/api/direct-messages"
+    : "/api/messages";
+  const paramKey: ParamKey = isDirectMessage ? "conversationId" : "channelId";
+console.log('paramKey', paramKey)
   // This key allow the ServerSocket io to emit a message to this chat to update the chat list
-  const queryKey = `chat:${chatId}`; 
+  const queryKey = `chat:${chatId}`;
 
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
@@ -59,7 +63,7 @@ export const ChatList = ({
   useChatSocket({
     queryKey,
     // This key allow the ServerSocket io to emit a message after a message is created, and we can listen to it to update the chat list.
-    addKey: `chat:${chatId}:messages`, 
+    addKey: `chat:${chatId}:messages`,
     // Same as above, but for when a message is updated.
     updateKey: `chat:${chatId}:messages:update`,
   });
@@ -69,7 +73,7 @@ export const ChatList = ({
     loadMore: fetchOlderMessages,
     shouldLoadMore: !isFetchingOlderMessages && !!hasPreviousMessages,
     count: data?.pages?.[0]?.items?.length ?? 0,
-  })
+  });
 
   if (status === "error") {
     return (
@@ -87,8 +91,8 @@ export const ChatList = ({
       {!hasPreviousMessages && <div className="flex-1" />}
       {!hasPreviousMessages && (
         <div className="flex justify-center">
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            {`--- Start of ${name} ---`}
+          <p className="text-xs text-zinc-600 dark:text-zinc-300">
+            {`--- This is the beginning of your chat with ${name} ---`}
           </p>
         </div>
       )}

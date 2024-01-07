@@ -10,6 +10,9 @@ import { ChatList } from "@/components/chat-components/chat-list";
 import { MessageInput } from "@/components/chat-components/message-input";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
 import { Profile } from "@prisma/client";
+import { VideoIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface MemberIdPageProps {
   params: {
@@ -20,17 +23,27 @@ interface MemberIdPageProps {
     video?: boolean;
   };
 }
-const ChannelHeader = ({ name, imageUrl }: Profile) => {
-
+const ChannelHeader = ({
+  name,
+  imageUrl,
+  serverId,
+  memberId,
+}: Profile & MemberIdPageProps["params"]) => {
   return (
     <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
-      <img
-        className="w-10 h-10 rounded-full"
-        src={imageUrl}
-        alt={name}
-      />
-      <h1 className="text-xl font-bold">{name}</h1>
-      <SocketIndicator />
+      <div className="flex items-center">
+        <img className="w-10 h-10 rounded-full" src={imageUrl} alt={name} />
+        <h1 className="text-xl font-bold ml-2">{name}</h1>
+      </div>
+      <div className="flex items-center">
+        <Link
+          href={`/servers/${serverId}/members/${memberId}?video=true`}
+          className="relative h-8 w-8 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full  flex items-center justify-center"
+        >
+          <VideoIcon className="w-6 h-6 text-white mr-2 absolute top-1 left-1" />
+        </Link>
+        <SocketIndicator />
+      </div>
     </div>
   );
 };
@@ -72,7 +85,10 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
 
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
-      <ChannelHeader {...otherMember.profile} />
+      <ChannelHeader
+        {...params}
+        {...otherMember.profile}
+      />
       {searchParams.video ? (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       ) : (
@@ -86,18 +102,18 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
                 channelId: conversation.id,
                 serverId: params.serverId,
               }}
-              paramKey="channelId"
               paramValue={conversation.id}
-              isDirectMessage={false}
+              isDirectMessage={true}
             />
           </section>
           <div className="w-full pt-[7.5rem] bg-transparent" />
           <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
             <MessageInput
+              isDirectMessage={true}
               name={otherMember.profile.name}
               query={{
                 serverId: params.serverId,
-                channelId: conversation.id,
+                conversationId: conversation.id,
               }}
             />
           </div>

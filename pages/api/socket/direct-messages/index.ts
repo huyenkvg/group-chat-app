@@ -11,7 +11,7 @@ export default async function handler(
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-
+console.log('req.query', req.query)
   try {
     const profile = await currentProfilePages(req);
     const { content, fileUrl } = req.body;
