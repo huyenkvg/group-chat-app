@@ -17,13 +17,14 @@ import ChatUploadFile from "../modals/chat-upload-modal/chat-upload-file";
 interface MessageInputProps {
   query: StringifiableRecord;
   name: string;
+  isDirectMessage?: boolean;
 }
 
 const formSchema = z.object({
   content: z.string().min(1),
 });
 
-export const MessageInput = ({ query, name }: MessageInputProps) => {
+export const MessageInput = ({ query, name, isDirectMessage }: MessageInputProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [openUploadDialog, setOpenUploadDialog] = useState(false);
 
@@ -33,7 +34,6 @@ export const MessageInput = ({ query, name }: MessageInputProps) => {
 
   const router = useRouter();
   const pathname = usePathname();
-  const isDirectMessage = pathname?.includes("/members/");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -103,6 +103,7 @@ export const MessageInput = ({ query, name }: MessageInputProps) => {
                       </Button>
                       <Button
                         type="submit"
+                        disabled={isLoading}
                         className=" h-[24px] px-4 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
                       >
                         Send

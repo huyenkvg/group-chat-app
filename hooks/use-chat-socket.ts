@@ -23,7 +23,6 @@ export const useChatSocket = ({
 }: ChatSocketProps) => {
   const { socket } = useSocket();
   const queryClient = useQueryClient();
-
   useEffect(() => {
     if (!socket) {
       return;
