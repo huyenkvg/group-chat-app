@@ -33,7 +33,6 @@ const ChatUploadFile = ({
   query: StringifiableRecord;
   onClose: () => void;
 }) => {
-  console.log('apiUrl', apiUrl)
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({

@@ -34,28 +34,12 @@ const ServerIdLayout = async ({
       },
     },
     include: {
-      channels: {
-        where: {
-          OR: [
-            {
-              type: "TEXT",
-            },
-            // {
-            //   isPrivate: false,
-            // }
-          ],
-        }
-      },
+      channels: true,
       members: {
         include: {
           profile: true,
         },
       },
-    },
-  });
-  const channel = await db.channel.findMany({
-    where: {
-      serverId: params.serverId,
     },
   });
   const isOwner = server?.profileId === profile.id;
