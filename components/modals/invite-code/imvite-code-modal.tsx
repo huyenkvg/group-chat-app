@@ -16,7 +16,9 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
-  const [inviteUrl, setInviteUrl] = useState(`${origin}/invite/${server?.inviteCode}`);
+  const [inviteUrl, setInviteUrl] = useState(
+    `${origin}/invite/${server?.inviteCode}`
+  );
 
   const onCopy = () => {
     navigator.clipboard.writeText(inviteUrl);
@@ -61,6 +63,9 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
         open={open}
         dialogProps={{
           onOpenChange: (open) => {
+            if (!open) {
+              onNew();
+            }
             setOpen(open);
           },
         }}
@@ -91,9 +96,7 @@ export const InviteModal = ({ server }: { server: Partial<IServer> }) => {
             className="text-xs text-zinc-500 mt-4"
           >
             Rregenerate invite link
-            <RefreshCw
-              className="w-4 h-4 ml-2"
-            />
+            <RefreshCw className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </CustomModal>
