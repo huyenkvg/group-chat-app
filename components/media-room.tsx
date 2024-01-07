@@ -40,7 +40,7 @@ export const MediaRoom = ({ chatId, audio, video }: MediaRoomProps) => {
   if (token === "") {
     return (
       <div className="flex items-center justify-center h-full">
-        <SpinnerIcon className="text-blue-500 w-14 h-14 animate-spin origin-center" />
+        <SpinnerIcon className="text-blue-500 animate-spin origin-center" />
       </div>
     );
   }
