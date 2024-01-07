@@ -109,7 +109,7 @@ export const ChatList = ({
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages?.map((group: any, index: number) => (
           <Fragment key={index}>
-            {group.items.map((message: MessageWithMemberWithProfile) => (
+            {group?.items?.map((message: MessageWithMemberWithProfile) => (
               <ChatMessage
                 key={message.id}
                 id={message.id}

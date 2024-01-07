@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
-
+import Link from "next/link";
+import Image from "next/image";
 interface InviteCodePageProps {
   params: {
     inviteCode: string;
@@ -55,15 +56,28 @@ const InviteCodePage = async ({
         },
       },
     });
-
-    if (server) {
-      return redirect(`/servers/${server.id}`);
-    }
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="bg-green-500 text-white text-center font-bold rounded-lg border shadow-lg p-10">
+          Success joining server!
+        </div>
+        <Image width={200} height={200} src={String(server.imageUrl)} alt={server.name} />
+        <Link href={`/servers/${server.id}`}>Go to {server.name}</Link>
+      </div>
+    );
   } catch (error) {
     console.error("[FAIL_JOIN_SERVER]", error);
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="bg-red-500 text-white font-bold rounded-lg border shadow-lg p-10">
+          Fail joining server
+        </div>
+      </div>
+    );
   }
 
-  return '/';
+  // Reload the page
+  return <>checking....</>;
 };
 
 export default InviteCodePage;
