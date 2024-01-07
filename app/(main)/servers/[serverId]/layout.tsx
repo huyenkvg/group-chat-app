@@ -34,7 +34,18 @@ const ServerIdLayout = async ({
       },
     },
     include: {
-      channels: true,
+      channels: {
+        where: {
+          OR: [
+            {
+              type: "TEXT",
+            },
+            // {
+            //   isPrivate: false,
+            // }
+          ],
+        }
+      },
       members: {
         include: {
           profile: true,
@@ -47,6 +58,7 @@ const ServerIdLayout = async ({
       serverId: params.serverId,
     },
   });
+  const isOwner = server?.profileId === profile.id;
 
   if (!server) {
     return redirect("/");
@@ -55,15 +67,20 @@ const ServerIdLayout = async ({
     <div className="h-full">
       <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0">
         <div className="flex-1 flex flex-col overflow-y-auto">
-          <ChannelList channels={server.channels as IChannel[]} />{" "}
-          <CreateChannelModal server={server} />
+          <div className="flex items-center justify-around bg-gray-800  w-full">
+            <h1 className="text-indigo-400 text-lg font-semibold px-4 py-2 uppercase">
+              {server.name}
+            </h1>
+            </div>
+          <ChannelList channels={server.channels} />{" "}
+          <CreateChannelModal server={server} isOwner={isOwner} />
           <DMList members={server.members as IMember[]} />
           <div className="flex-shrink-0 flex bg-gray-600 p-2">
             <div className="flex items-center justify-between w-full">
               <span className="text-gray-300 text-sm">
                 Members: {server.members.length}
               </span>
-              <InviteModal server={server as IServer} />
+              <InviteModal server={server} />
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Member, MemberRole, Profile } from "@prisma/client";
 
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import type{ Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 import Link from "next/link";
 
 interface ChatMessageProps {
@@ -60,7 +60,10 @@ const ChatMessage = ({
           </div>
           <p className="text-sm text-zinc-600 dark:text-zinc-200">
             {deleted ? "Message deleted" : content}
-            </p>
+          </p>
+          {isPDF && <Link href={fileUrl} className="text-[0.85rem] tracking-tight underline text-blue-600">
+            {fileUrl}
+            </Link>}
           {isImage && (
             <a
               href={fileUrl}

@@ -36,7 +36,7 @@ const SetupPage = async () => {
                 href={`/servers/${server.id}`}
                 className="w-full text-cyan-500 flex flex-row gap-x-4 items-center"
               >
-                <div className="h-16 w-16 relative">
+                <div className="h-10 w-10 relative">
                   <Image
                     fill
                     src={server.imageUrl}
