@@ -103,6 +103,7 @@ export const MessageInput = ({ query, name }: MessageInputProps) => {
                       </Button>
                       <Button
                         type="submit"
+                        disabled={isLoading}
                         className=" h-[24px] px-4 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
                       >
                         Send
