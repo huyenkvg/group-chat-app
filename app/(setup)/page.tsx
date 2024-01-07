@@ -22,10 +22,11 @@ const SetupPage = async () => {
   return (
     <div className="h-screen w-full">
       <div className="font-bold w-full max-w-2xl  bg-indigo-50 h-screen px-10 pt-20 mx-auto 2xl:px-24">
-        <h1 className="text-2xl  text-indigo-500 font-semibold uppercase">
+        <h1 className=" text-indigo-500 font-semibold uppercase text-xl text-center">
           Server List
         </h1>
-        <ul className="gap-y-2 flex flex-col  w-full overflow-y-auto">
+
+        <ul className="gap-y-4 flex flex-col  w-full overflow-y-auto  py-8 ">
           {servers.map((server) => (
             <li
               key={server.id}
@@ -53,8 +54,8 @@ const SetupPage = async () => {
               )}
             </li>
           ))}
-          <InitialModal />
         </ul>
+          <InitialModal />
       </div>
     </div>
   );

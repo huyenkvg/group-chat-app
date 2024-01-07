@@ -13,6 +13,7 @@ import { RHFFormItem } from "@/components/RHF/RHFFormItem";
 import { InputField } from "@/components/RHF/RHFInputField";
 import { FileUpload } from "@/components/ui/file-upload";
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -60,7 +61,10 @@ const InitialModal = () => {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Create Server</Button>
+      <Button className='bg-indigo-500' onClick={() => setOpenModal(true)}>
+        <Plus className="w-4 h-4 mr-3" />
+        Create Server
+      </Button>
       <CustomModal
         title="Ceate your own workspace"
         description="Give your server a personality with a name and an image."
