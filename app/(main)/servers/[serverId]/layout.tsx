@@ -18,9 +18,8 @@ const ServerIdLayout = async ({
 }) => {
   const profile = await currentProfile();
   if (!profile) {
-    // TODO: bring localhost 3000 to ENV named NEXT_PUBLIC_URL
     return redirectToSignIn({
-      returnBackUrl: `http://localhost:3000/servers/${params.serverId}`,
+      returnBackUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/servers/${params.serverId}`,
     });
   }
 
