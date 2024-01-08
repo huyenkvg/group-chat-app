@@ -1,6 +1,6 @@
 # Group Chat App
 
-![Group Chat App Logo](path/to/your/logo.png)
+[DEMO](http://128.199.149.6/)
 
 ## Table of Contents
 
