@@ -2,6 +2,15 @@
 
 [DEMO](http://128.199.149.6/)
 
+Because I don't have the domain name yet. 
+
+So you need to ignore Chrome’s secure origin policy, follow these steps. Navigate to chrome://flags/#unsafely-treat-insecure-origin-as-secure in Chrome.
+
+Find and enable the Insecure origins treated as secure section (see below). Add any addresses you want to ignore the secure origin policy for. Remember to include the port number too (if required). Save and restart Chrome.
+Remember this is for dev purposes only. The live working app will need to be hosted on https for users to be able to use their microphone or camera.
+
+"unsafely-treat-insecure-origin-as-secure" flag is not working on Chrome
+(https://stackoverflow.com/questions/52759992/how-to-access-camera-and-microphone-in-chrome-without-https)
 ## Table of Contents
 
 - [Introduction](#introduction)
