@@ -42,7 +42,7 @@ The Group Chat App is a comprehensive real-time messaging application that allow
 1. Clone the repository:
 
  ```bash
- git clone https://github.com/huyenkvg/group-chat-app.git
+ git clone git@github.com:huyenkvg/group-chat-app.git
  ```
 2. Install dependencies:
   ```bash
