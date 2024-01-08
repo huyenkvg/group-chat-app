@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
-import Link from "next/link";
-import Image from "next/image";
+import { Server } from "@prisma/client";
+
 interface InviteCodePageProps {
   params: {
     inviteCode: string;
@@ -53,7 +53,7 @@ const InviteCodePage = async ({
             },
           },
         })
-        .then((server) => {
+        .then((server: Server) => {
           redirect(`/servers/${server.id}`);
         });
     } catch (error) {
