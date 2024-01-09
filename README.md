@@ -2,7 +2,7 @@
 
 [DEMO](http://128.199.149.6/)
 
-Because I don't have the domain name yet. 
+Because I don't have the domain name & setup SSL yet. 
 
 So you need to ignore Chrome’s secure origin policy, follow these steps. Navigate to chrome://flags/#unsafely-treat-insecure-origin-as-secure in Chrome.
 
