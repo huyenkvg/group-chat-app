@@ -4,7 +4,7 @@
 
 Because I don't have the domain name & setup SSL yet. 
 
-So you need to ignore Chrome’s secure origin policy, follow these steps. Navigate to chrome://flags/#unsafely-treat-insecure-origin-as-secure in Chrome.
+So you may need to ignore Chrome’s secure origin policy to use th Video Chat, follow these steps. Navigate to chrome://flags/#unsafely-treat-insecure-origin-as-secure in Chrome.
 
 Find and enable the Insecure origins treated as secure section (see below). Add any addresses you want to ignore the secure origin policy for. Remember to include the port number too (if required). Save and restart Chrome.
 Remember this is for dev purposes only. The live working app will need to be hosted on https for users to be able to use their microphone or camera.
