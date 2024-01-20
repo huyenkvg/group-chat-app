@@ -41,7 +41,7 @@ export const ChatList = ({
     ? "/api/direct-messages"
     : "/api/messages";
   const paramKey: ParamKey = isDirectMessage ? "conversationId" : "channelId";
-console.log('paramKey', paramKey)
+
   // This key allow the ServerSocket io to emit a message to this chat to update the chat list
   const queryKey = `chat:${chatId}`;
 

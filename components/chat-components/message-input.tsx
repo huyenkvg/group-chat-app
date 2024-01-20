@@ -63,7 +63,7 @@ export const MessageInput = ({ query, name, isDirectMessage }: MessageInputProps
       });
 
       form.reset();
-      router.refresh();
+      // router.refresh();
     } catch (error) {
       console.log(error);
     }

@@ -57,23 +57,24 @@ export const CreateChannelModal = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch(`/api/servers/${server?.id}/channels`, {
+      await fetch(`/api/servers/${server?.id}/channels`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       }).then(async (res) => {
-        if (!response.ok) {
+        if (!res.ok) {
           throw new Error("Failed to create channel");
         }
+        setOpen(false);
         const data = await res.json();
-        router.push(`/servers/${server?.id}`);
-        return res;
+        router.refresh();  
       });
     } catch (error) {
       console.log(error);
     }
+    setOpen(false);
   };
 
   return (
@@ -82,6 +83,7 @@ export const CreateChannelModal = ({
         <Button
           variant="default"
           size="sm"
+          disabled={methods.formState.isSubmitting}
           className="text-xs text-zinc-500 hover:text-zinc-100 rounded-none"
           onClick={() => {
             setOpen(true);
