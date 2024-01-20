@@ -71,7 +71,6 @@ export async function POST(
 
     return NextResponse.json(updatedServer);
   } catch (error) {
-    console.log("CHANNELS_POST", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

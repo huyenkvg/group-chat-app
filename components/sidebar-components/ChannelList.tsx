@@ -9,7 +9,7 @@ import React from "react";
 const ChannelList = ({ channels = [] }: { channels: Channel[] }) => {
   const pathname = usePathname();
   return (
-    <nav className="px-2 py-4 bg-gray-800 space-y-1">
+    <nav className="px-2 py-4 bg-gray-800 space-y-1 max-h-72 overflow-y-auto">
       <a
         href="#"
         className=" text-white group flex items-center px-2 py-2 mb-2 tracking-wider text-base font-medium rounded-md gap-x-2 justify-between"
