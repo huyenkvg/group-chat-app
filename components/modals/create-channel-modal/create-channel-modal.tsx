@@ -69,7 +69,9 @@ export const CreateChannelModal = ({
         }
         setOpen(false);
         const data = await res.json();
+        console.log('data', data)
         router.refresh();  
+        router.push(`/servers/${server?.id}/channels/${data.id}`);
       });
     } catch (error) {
       console.log(error);
@@ -84,7 +86,7 @@ export const CreateChannelModal = ({
           variant="default"
           size="sm"
           disabled={methods.formState.isSubmitting}
-          className="text-xs text-zinc-500 hover:text-zinc-100 rounded-none"
+          className="text-xs text-zinc-500 hover:text-zinc-100 rounded-none dark:text-zinc-400 dark:bg-gray-700 dark:hover:bg-gray-700"
           onClick={() => {
             setOpen(true);
           }}

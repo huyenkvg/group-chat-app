@@ -9,7 +9,7 @@ export const SocketIndicator = () => {
     return (
       <div className=" ttext-orange-700 border-none rounded-full px-2 py-1 flex flex-row items-center">
         <Dot className="text-gray-500 w-10 h-10" />
-        connecting...
+        <p className="hidden md:block">connecting...</p>
       </div>
     );
   }
@@ -18,7 +18,7 @@ export const SocketIndicator = () => {
     <div className="  text-green-700 border-none rounded-full px-2 py-1 flex flex-row items-center">
       <Dot className="text-green-600 w-10 h-10
       " />
-      connected
+     <p className="hidden md:block">connected</p>
     </div>
   );
 };

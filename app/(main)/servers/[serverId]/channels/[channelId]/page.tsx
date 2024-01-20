@@ -5,8 +5,10 @@ import { db } from "@/lib/db";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
 import { MessageInput } from "@/components/chat-components/message-input";
 import { ChatList } from "@/components/chat-components/chat-list";
-import { Channel, ChannelType } from "@prisma/client";
+import { Channel, ChannelType, Server } from "@prisma/client";
 import { MediaRoom } from "@/components/media-room";
+import { SheetMenu } from "../../../_components/sheet-menu/SheetMenu";
+import { IServer } from "@/typing/model-types";
 
 interface ChannelIdPageProps {
   params: {
@@ -19,6 +21,21 @@ const getChannel = async (channelId: string) => {
   return db.channel.findUnique({
     where: {
       id: channelId,
+    },
+  });
+};
+const getServer = async (serverId: string) => {
+  return db.server.findUnique({
+    where: {
+      id: serverId,
+    },
+    include: {
+      members: {
+        include: {
+          profile: true,
+        },
+      },
+      channels: true,
     },
   });
 };
@@ -35,12 +52,19 @@ const getMember = async (serverId: string, profileId: string) => {
   });
 };
 
-const ChannelHeader = ({ channel }: { channel: Channel }) => {
-  if (!channel) {
+const ChannelHeader = ({
+  channel,
+  server,
+}: {
+  channel: Channel;
+  server: IServer;
+}) => {
+  if (!channel || !server) {
     return null;
   }
   return (
     <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
+      <SheetMenu server={server} />
       <h1 className="text-xl font-bold"># {channel.name}</h1>
       <SocketIndicator />
     </div>
@@ -55,6 +79,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   }
 
   const channel = await getChannel(params.channelId);
+  const server = await getServer(params.serverId);
   const member = await getMember(params.serverId, profile.id);
 
   if (!channel || !member) {
@@ -62,22 +87,20 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   }
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
-      <ChannelHeader channel={channel} />
+      <ChannelHeader server={server as unknown as IServer} channel={channel} />
       {channel?.type === ChannelType.TEXT && (
         <>
-          <section className="flex-1 overflow-y-scroll">
-            <ChatList
-              member={member}
-              name={channel.name}
-              chatId={channel.id}
-              socketQuery={{
-                channelId: channel.id,
-                serverId: channel.serverId,
-              }}
-              paramValue={channel.id}
-              isDirectMessage={false}
-            />
-          </section>
+          <ChatList
+            member={member}
+            name={channel.name}
+            chatId={channel.id}
+            socketQuery={{
+              channelId: channel.id,
+              serverId: channel.serverId,
+            }}
+            paramValue={channel.id}
+            isDirectMessage={false}
+          />
           <div className="w-full pt-[7.5rem] bg-transparent" />
           <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
             <MessageInput

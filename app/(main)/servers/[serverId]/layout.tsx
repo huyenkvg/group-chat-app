@@ -8,6 +8,8 @@ import { InviteModal } from "@/components/modals/invite-code/imvite-code-modal";
 import { CreateChannelModal } from "@/components/modals/create-channel-modal/create-channel-modal";
 import ChannelList from "@/components/sidebar-components/ChannelList";
 import DMList from "@/components/sidebar-components/DMList";
+import { ChevronDown, SendHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ServerIdLayout = async ({
   children,
@@ -46,15 +48,25 @@ const ServerIdLayout = async ({
   if (!server) {
     return redirect("/");
   }
+
   return (
     <div className="h-full">
-      <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0">
+      <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0 invisible md:visible">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div className="flex items-center justify-around bg-gray-800  w-full">
             <h1 className="text-indigo-400 text-lg font-semibold px-4 py-2 uppercase">
               {server.name}
             </h1>
-            </div>
+          </div>
+          <div className=" bg-gray-800  w-full px-2">
+            <a
+              href="#"
+              className=" text-white group  flex items-center px-2 py-2 mb-2 tracking-wider text-base font-medium gap-x-2 justify-between"
+            >
+              channels
+              <ChevronDown className="w-4 h-5 text-gray-200" />
+            </a>           
+          </div>
           <ChannelList channels={server.channels} />{" "}
           <CreateChannelModal server={server} isOwner={isOwner} />
           <DMList members={server.members as IMember[]} />
