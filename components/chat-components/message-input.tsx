@@ -10,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import queryString, { StringifiableRecord } from "query-string";
 import ChatUploadFile from "../modals/chat-upload-modal/chat-upload-file";
 
@@ -24,7 +24,11 @@ const formSchema = z.object({
   content: z.string().min(1),
 });
 
-export const MessageInput = ({ query, name, isDirectMessage }: MessageInputProps) => {
+export const MessageInput = ({
+  query,
+  name,
+  isDirectMessage,
+}: MessageInputProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [openUploadDialog, setOpenUploadDialog] = useState(false);
 
@@ -63,7 +67,7 @@ export const MessageInput = ({ query, name, isDirectMessage }: MessageInputProps
       });
 
       form.reset();
-      router.refresh();
+      // router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -83,32 +87,38 @@ export const MessageInput = ({ query, name, isDirectMessage }: MessageInputProps
               <FormItem>
                 <FormControl>
                   <div className="relative p-2">
-                    <div className="rounded-t-lg bg-zinc-200/90 py-2 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0  text-zinc-600 dark:text-zinc-200">
-                      <Textarea
-                        disabled={isLoading}
-                        className="px-4 py-2 w-full bg-transparent border-none text-black dark:text-zinc-200"
-                        placeholder={`Message to ${
-                          isDirectMessage ? "@" + name : "#" + name
-                        }`}
-                        {...field}
-                      />
-                    </div>
-                    <div className="bg-zinc-200/90 justify-between px-4 flex flex-row pb-2 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0  text-zinc-600 dark:text-zinc-200 rounded-b-lg">
+                    <div className="bg-zinc-200/90 justify-between px-4 flex flex-row pt-2 pb-1 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0  text-zinc-600 dark:text-zinc-200 rounded-t-lg">
                       <Button
                         type="button"
                         onClick={() => setOpenUploadDialog(true)}
-                        className=" h-6 w-6 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
+                        className="h-7 w-7 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
                       >
                         <Paperclip className="text-white dark:text-[#313338]" />
                       </Button>
                       <Button
                         type="submit"
                         disabled={isLoading}
-                        className=" h-[24px] px-4 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
+                        className="h-[1.75rem] text-md bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full flex items-center justify-center"
                       >
-                        Send
-                        <SendHorizontal className="text-white dark:text-[#313338] p-1" />
+                        <p className="hidden  md:block">Send</p>
+                        <SendHorizontal className="text-white dark:text-[#313338] p-1 h-6" />
                       </Button>
+                    </div>
+                    <div className="rounded-b-lg bg-zinc-200/90 py-2 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0  text-zinc-600 dark:text-zinc-200">
+                      <Textarea
+                        disabled={isLoading}
+                        className="px-4 py-2 w-full bg-transparent border-none text-black dark:text-zinc-200"
+                        placeholder={`Message to ${
+                          isDirectMessage ? "@" + name : "#" + name
+                        }`}
+                        {...field}  
+                        onKeyDown={(event: KeyboardEvent<HTMLTextAreaElement>) => {
+                          if (event.key === "Enter" && !event.shiftKey) {
+                            event.preventDefault();
+                            form.handleSubmit(onSubmit)();
+                          }
+                        }}
+                      />
                     </div>
                   </div>
                 </FormControl>

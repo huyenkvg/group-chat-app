@@ -9,10 +9,12 @@ import { MediaRoom } from "@/components/media-room";
 import { ChatList } from "@/components/chat-components/chat-list";
 import { MessageInput } from "@/components/chat-components/message-input";
 import { SocketIndicator } from "@/components/providers/socket-indicator";
-import { Profile } from "@prisma/client";
+import { Profile, Server } from "@prisma/client";
 import { VideoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { SheetMenu } from "../../../_components/sheet-menu/SheetMenu";
+import { IServer } from "@/typing/model-types";
 
 interface MemberIdPageProps {
   params: {
@@ -23,17 +25,35 @@ interface MemberIdPageProps {
     video?: boolean;
   };
 }
+const getServer = async (serverId: string) => {
+  return db.server.findUnique({
+    where: {
+      id: serverId,
+    },
+    include: {
+      members: {
+        include: {
+          profile: true,
+        },
+      },
+      channels: true,
+    },
+  });
+};
+
 const ChannelHeader = ({
+  server,
   name,
   imageUrl,
   serverId,
   memberId,
-}: Profile & MemberIdPageProps["params"]) => {
+}: Profile & MemberIdPageProps["params"] & { server: IServer }) => {
   return (
     <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
+      <SheetMenu server={server}  />
       <div className="flex items-center">
         <img className="w-10 h-10 rounded-full" src={imageUrl} alt={name} />
-        <h1 className="text-xl font-bold ml-2">{name}</h1>
+        <h1 className="md:text-xl font-bold ml-2">{name}</h1>
       </div>
       <div className="flex items-center">
         <Link
@@ -55,6 +75,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
     return redirectToSignIn();
   }
 
+  const server = await getServer(params.serverId);
   const currentMember = await db.member.findFirst({
     where: {
       serverId: params.serverId,
@@ -77,7 +98,6 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   if (!conversation) {
     return redirect(`/servers/${params.serverId}`);
   }
-
   const { memberOne, memberTwo } = conversation;
 
   const otherMember =
@@ -85,15 +105,11 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
 
   return (
     <div className="bg-opacity-40 bg-slate-200   dark:bg-[#313338]  flex flex-col h-full relative">
-      <ChannelHeader
-        {...params}
-        {...otherMember.profile}
-      />
+      <ChannelHeader server={server as unknown as IServer} {...params} {...otherMember.profile} />
       {searchParams.video ? (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       ) : (
         <>
-          <section className="flex-1 overflow-y-scroll">
             <ChatList
               member={currentMember}
               name={otherMember.profile.name}
@@ -105,7 +121,6 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
               paramValue={conversation.id}
               isDirectMessage={true}
             />
-          </section>
           <div className="w-full pt-[7.5rem] bg-transparent" />
           <div className="h-fit absolute bottom-0 right-0 left-0 flex-1">
             <MessageInput

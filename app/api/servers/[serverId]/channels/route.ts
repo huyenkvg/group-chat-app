@@ -54,24 +54,16 @@ export async function POST(
         { status: 403 }
       );
     }
-    const updatedServer = await db.server.update({
-      where: { id: serverId },
+    const newChannel = await db.channel.create({
       data: {
-        channels: {
-          create: [
-            {
-              profileId: profile.id,
-              name,
-              type,
-            },
-          ],
-        },
+        profileId: profile.id,
+        serverId,
+        name,
+        type,
       },
     });
-
-    return NextResponse.json(updatedServer);
+    return NextResponse.json(newChannel);
   } catch (error) {
-    console.log("CHANNELS_POST", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

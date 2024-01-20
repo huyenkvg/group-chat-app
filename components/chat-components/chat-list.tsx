@@ -41,7 +41,7 @@ export const ChatList = ({
     ? "/api/direct-messages"
     : "/api/messages";
   const paramKey: ParamKey = isDirectMessage ? "conversationId" : "channelId";
-console.log('paramKey', paramKey)
+
   // This key allow the ServerSocket io to emit a message to this chat to update the chat list
   const queryKey = `chat:${chatId}`;
 
@@ -87,7 +87,7 @@ console.log('paramKey', paramKey)
   }
 
   return (
-    <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
+    <section ref={chatRef} className="flex-1 flex flex-col py-4  overflow-y-scroll">
       {!hasPreviousMessages && <div className="flex-1" />}
       {!hasPreviousMessages && (
         <div className="flex justify-center">
@@ -130,6 +130,6 @@ console.log('paramKey', paramKey)
         ))}
       </div>
       <div ref={bottomRef} />
-    </div>
+    </section>
   );
 };
