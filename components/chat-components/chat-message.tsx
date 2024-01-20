@@ -48,14 +48,14 @@ const ChatMessage = ({
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
               <Link
-                className="font-semibold text-sm hover:underline cursor-pointer"
+                className="font-semibold text-sm hover:underline cursor-pointer dark:text-zinc-400"
                 href={`#`}
               >
                 {member.profile.name}
               </Link>
             </div>
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              {timestamp.toString()}
+            <span className="text-xs text-zinc-500 dark:text-zinc-600 tracking-tighter">
+              {timestamp.format("YYYY-MM-DD HH:mm A")}
             </span>
           </div>
           <p className="text-sm text-zinc-600 dark:text-zinc-200">

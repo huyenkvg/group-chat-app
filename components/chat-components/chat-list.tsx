@@ -87,7 +87,7 @@ export const ChatList = ({
   }
 
   return (
-    <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
+    <section ref={chatRef} className="flex-1 flex flex-col py-4  overflow-y-scroll">
       {!hasPreviousMessages && <div className="flex-1" />}
       {!hasPreviousMessages && (
         <div className="flex justify-center">
@@ -130,6 +130,6 @@ export const ChatList = ({
         ))}
       </div>
       <div ref={bottomRef} />
-    </div>
+    </section>
   );
 };
