@@ -26,38 +26,14 @@ const InviteCodePage = async ({
     const existingServer = await db.server.findUnique({
       where: {
         inviteCode,
-        members: {
-          some: {
-            profileId: profile.id,
-          },
-        },
+      },
+      include: {
+        members: true,
       },
     });
     // Redirect him/her to the existed server page
-    if (existingServer) {
-      redirect(`/servers/${existingServer.id}`);
-    }
-    try {
-      const server = await db.server
-        .update({
-          where: {
-            inviteCode: inviteCode,
-          },
-          data: {
-            members: {
-              create: [
-                {
-                  profileId: profile.id,
-                },
-              ],
-            },
-          },
-        })
-        .then((server: Server) => {
-          redirect(`/servers/${server.id}`);
-        });
-    } catch (error) {
-      console.error("[FAIL_JOIN_SERVER]", error);
+
+    if (!existingServer) {
       return (
         <div className="flex items-center justify-center h-screen">
           <div className="bg-red-500 bg-opacity-40 text-white font-bold rounded-lg border shadow-lg p-10">
@@ -66,6 +42,24 @@ const InviteCodePage = async ({
         </div>
       );
     }
+
+    if (
+      existingServer &&
+      existingServer?.members.find((m) => m.profileId === profile.id)
+    ) {
+      redirect(`/servers/${existingServer.id}`);
+    }
+    try {
+      const member = await db.member.create({
+        data: {
+          profileId: profile.id,
+          serverId: existingServer.id,
+        },
+      });
+    } catch (error) {
+      console.log("[FAIL_JOIN_SERVER]", error);
+    }
+    redirect(`/servers/${existingServer.id}`);
   }
   // The user is already a member of the server
 
