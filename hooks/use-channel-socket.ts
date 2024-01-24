@@ -64,7 +64,7 @@ export const useChannelSocket = ({
       socket.off("notification");
       socket.off("should-update-server-contents");
     };
-  }, [socket, channelIds, pathname, mutateServerId]);
+  }, [socket, channelIds, pathname, mutateServerId, toast]);
 
   const readMessages = useCallback((id: Channel["id"]) => {
     setChannelsHasNewMessage((prev) => {
