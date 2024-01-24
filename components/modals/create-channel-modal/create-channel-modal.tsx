@@ -14,8 +14,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ChannelType, Server } from "@prisma/client";
 import { RHFSelect } from "@/components/RHF/RHFSelect";
+import { useToast } from "@/components/ui/use-toast";
 
-const formSchema = z.object({
+const createChannelFormSchema = z.object({
   name: z
     .string()
     .min(1, {
@@ -31,20 +32,22 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
   // isPrivate: z.boolean(),
 });
-
+export type CreateChannelFormValues = z.infer<typeof createChannelFormSchema>;
 export const CreateChannelModal = ({
   server,
   isOwner = false,
+  mutateServerId,
 }: {
   server: Server;
   isOwner?: boolean;
+  mutateServerId: () => void;
 }) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
-
+  const { toast } = useToast();
   const methods = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createChannelFormSchema),
     defaultValues: {
       name: "",
       type: ChannelType.TEXT,
@@ -55,7 +58,7 @@ export const CreateChannelModal = ({
 
   const { isSubmitting } = methods.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: CreateChannelFormValues) => {
     try {
       await fetch(`/api/servers/${server?.id}/channels`, {
         method: "POST",
@@ -69,14 +72,23 @@ export const CreateChannelModal = ({
         }
         setOpen(false);
         const data = await res.json();
-        console.log('data', data)
-        router.refresh();  
+        toast({
+          duration: 1500,
+          title: "Channel created successfully",
+        });
+        mutateServerId();
         router.push(`/servers/${server?.id}/channels/${data.id}`);
       });
+      setOpen(false);
     } catch (error) {
       console.log(error);
+      toast({
+        duration: 3000,
+        title: "Error creating channel",
+        description: (error as any).message,
+        variant: "destructive"
+      });
     }
-    setOpen(false);
   };
 
   return (
