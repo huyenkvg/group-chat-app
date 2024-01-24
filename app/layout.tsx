@@ -5,6 +5,7 @@ import { Open_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SocketProvider } from "@/components/providers/socket-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "@/components/ui/toaster";
 const font = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default function RootLayout({
             <SocketProvider>
             <QueryProvider>
                 {children}
+                <Toaster />
               </QueryProvider>
             </SocketProvider>
           </ThemeProvider>

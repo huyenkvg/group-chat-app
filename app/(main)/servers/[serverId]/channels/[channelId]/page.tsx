@@ -9,6 +9,7 @@ import { Channel, ChannelType, Server } from "@prisma/client";
 import { MediaRoom } from "@/components/media-room";
 import { SheetMenu } from "../../../_components/sheet-menu/SheetMenu";
 import { IServer } from "@/typing/model-types";
+import { revalidatePath } from "next/cache";
 
 interface ChannelIdPageProps {
   params: {
@@ -62,9 +63,14 @@ const ChannelHeader = ({
   if (!channel || !server) {
     return null;
   }
+  const mutateServerId = async () => {
+    "use server";
+    revalidatePath("/");
+  };
+
   return (
     <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
-      <SheetMenu server={server} />
+      <SheetMenu server={server} mutateServerId={mutateServerId}/>
       <h1 className="text-xl font-bold"># {channel.name}</h1>
       <SocketIndicator />
     </div>

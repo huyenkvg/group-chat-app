@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SheetMenu } from "../../../_components/sheet-menu/SheetMenu";
 import { IServer } from "@/typing/model-types";
+import { revalidatePath } from "next/cache";
 
 interface MemberIdPageProps {
   params: {
@@ -48,9 +49,14 @@ const ChannelHeader = ({
   serverId,
   memberId,
 }: Profile & MemberIdPageProps["params"] & { server: IServer }) => {
+  const mutateServerId = async () => {
+    "use server";
+    revalidatePath("/");
+  };
+
   return (
     <div className="bg-gray-800  text-white py-4 px-6 flex flex-row items-center justify-between">
-      <SheetMenu server={server}  />
+      <SheetMenu server={server} mutateServerId={mutateServerId} />
       <div className="flex items-center">
         <img className="w-10 h-10 rounded-full" src={imageUrl} alt={name} />
         <h1 className="md:text-xl font-bold ml-2">{name}</h1>
