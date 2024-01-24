@@ -6,7 +6,7 @@ import { Channel } from "@prisma/client";
 import { SendHorizontal } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 
 const ChannelList = ({
   channels = [],
