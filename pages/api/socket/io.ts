@@ -28,6 +28,12 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     // Socket.IO will start listening for requests to the specified path
 
     res.socket.server.io = io;
+    
+    io.on('connection', socket => {
+      socket.on('server-has-changed', msg => {
+        io.emit('should-update-server-contents', msg)
+      })
+    })
   }
 
   res.end();

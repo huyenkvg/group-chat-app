@@ -71,7 +71,8 @@ const ServerIdLayout = async ({
               <ChevronDown className="w-4 h-5 text-gray-200" />
             </a>
           </div>
-          <ChannelList channels={server.channels} />{" "}
+          <ChannelList channels={server.channels} 
+            mutateServerId={mutateServerId}/>
           <CreateChannelModal
             server={server}
             isOwner={isOwner}

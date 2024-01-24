@@ -15,6 +15,7 @@ import { z } from "zod";
 import { ChannelType, Server } from "@prisma/client";
 import { RHFSelect } from "@/components/RHF/RHFSelect";
 import { useToast } from "@/components/ui/use-toast";
+import { useChannelSocket } from "@/hooks/use-channel-socket";
 
 const createChannelFormSchema = z.object({
   name: z
@@ -43,7 +44,7 @@ export const CreateChannelModal = ({
   mutateServerId: () => void;
 }) => {
   const [open, setOpen] = useState(false);
-
+  const { newChannelHasBeenCreated } = useChannelSocket({ channelIds: [], mutateServerId });
   const router = useRouter();
   const { toast } = useToast();
   const methods = useForm({
@@ -77,6 +78,7 @@ export const CreateChannelModal = ({
           title: "Channel created successfully",
         });
         mutateServerId();
+        newChannelHasBeenCreated(server?.id);
         router.push(`/servers/${server?.id}/channels/${data.id}`);
       });
       setOpen(false);
@@ -86,7 +88,7 @@ export const CreateChannelModal = ({
         duration: 3000,
         title: "Error creating channel",
         description: (error as any).message,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };

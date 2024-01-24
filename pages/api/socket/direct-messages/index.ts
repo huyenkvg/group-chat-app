@@ -88,7 +88,7 @@ export default async function handler(
     const channelKey = `chat:${conversationId}:messages`;
 
     res?.socket?.server?.io?.emit(channelKey, message);
-    res?.socket?.server?.io?.emit("notification", conversationId);
+    res?.socket?.server?.io?.emit("notification:dm", conversationId);
 
 
     return res.status(200).json(message);

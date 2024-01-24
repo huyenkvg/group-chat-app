@@ -8,13 +8,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 
-const ChannelList = ({ channels = [] }: { channels: Channel[] }) => {
+const ChannelList = ({
+  channels = [],
+  mutateServerId,
+}: {
+  channels: Channel[];
+  mutateServerId: () => void;
+}) => {
   const pathname = usePathname();
   const restChannels = channels.filter((channel) => channel.name !== "general");
   const generalChannel = channels.find((channel) => channel.name === "general");
 
-  const { channelsHasNewMessage, readMessages } = useChannelSocket({
+  const {
+    channelsHasNewMessage,
+    readMessages,
+  } = useChannelSocket({
     channelIds: channels.map((channel) => channel.id),
+    mutateServerId,
   });
 
   return (
@@ -34,7 +44,7 @@ const ChannelList = ({ channels = [] }: { channels: Channel[] }) => {
           </span>
           {channelsHasNewMessage[generalChannel.id] > 0 &&
             !pathname?.endsWith(`/channels/${generalChannel.id}`) && (
-              <span className="px-1 bg-red-500 rounded-full text-sm text-white" >
+              <span className="px-1 bg-red-500 rounded-full text-sm text-white">
                 {channelsHasNewMessage[generalChannel.id]}
               </span>
             )}
@@ -57,7 +67,7 @@ const ChannelList = ({ channels = [] }: { channels: Channel[] }) => {
               <span className="w-4 h-5 text-gray-300">#</span>
               {channel.name}
               {hasNewMessage && !isCurrentPath && (
-                <span className="px-1 bg-red-500 rounded-full text-sm text-white" >
+                <span className="px-1 bg-red-500 rounded-full text-sm text-white">
                   {channelsHasNewMessage[channel.id]}
                 </span>
               )}
