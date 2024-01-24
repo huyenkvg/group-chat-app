@@ -131,7 +131,8 @@ export const CreateChannelModal = ({
                   description="Select a channel type"
                   options={[
                     { label: "Text", value: ChannelType.TEXT },
-                    { label: "Voice", value: ChannelType.AUDIO },
+                    // TODO: Implement voice channels
+                    // { label: "Voice", value: ChannelType.AUDIO },
                     { label: "Video", value: ChannelType.VIDEO },
                   ]}
                 />
