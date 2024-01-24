@@ -11,7 +11,6 @@ export default async function handler(
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-console.log('req.query', req.query)
   try {
     const profile = await currentProfilePages(req);
     const { content, fileUrl } = req.body;
@@ -89,6 +88,8 @@ console.log('req.query', req.query)
     const channelKey = `chat:${conversationId}:messages`;
 
     res?.socket?.server?.io?.emit(channelKey, message);
+    res?.socket?.server?.io?.emit("notification", conversationId);
+
 
     return res.status(200).json(message);
   } catch (error) {

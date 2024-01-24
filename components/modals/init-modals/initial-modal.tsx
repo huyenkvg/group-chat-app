@@ -70,7 +70,6 @@ const InitialModal = () => {
           </Button>
         ),
       });
-      console.log("Server created successfully");
       router.refresh();
     } catch (error) {
       console.error("Error creating server:", error);
