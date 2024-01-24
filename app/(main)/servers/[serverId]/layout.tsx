@@ -10,6 +10,7 @@ import ChannelList from "@/components/sidebar-components/ChannelList";
 import DMList from "@/components/sidebar-components/DMList";
 import { ChevronDown, SendHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 const ServerIdLayout = async ({
   children,
@@ -24,7 +25,6 @@ const ServerIdLayout = async ({
       returnBackUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/servers/${params.serverId}`,
     });
   }
-
   const server = await db.server.findUnique({
     where: {
       id: params.serverId,
@@ -44,11 +44,16 @@ const ServerIdLayout = async ({
     },
   });
   const isOwner = server?.profileId === profile.id;
+  const mutateServerId = async () => {
+    "use server";
+    revalidatePath("/");
+  };
 
   if (!server) {
     return redirect("/");
   }
-
+  const myMemberId =
+    server.members.find((member) => member.profileId === profile.id)?.id || "";
   return (
     <div className="h-full">
       <div className="flex h-full w-60 z-20 flex-col fixed inset-y-0 invisible md:visible">
@@ -65,11 +70,22 @@ const ServerIdLayout = async ({
             >
               channels
               <ChevronDown className="w-4 h-5 text-gray-200" />
-            </a>           
+            </a>
           </div>
-          <ChannelList channels={server.channels} />{" "}
-          <CreateChannelModal server={server} isOwner={isOwner} />
-          <DMList members={server.members as IMember[]} />
+          <ChannelList
+            channels={server.channels}
+            mutateServerId={mutateServerId}
+          />
+          <CreateChannelModal
+            server={server}
+            isOwner={isOwner}
+            mutateServerId={mutateServerId}
+          />
+          <DMList
+            members={server.members as IMember[]}
+            myId={myMemberId}
+            mutateServerId={mutateServerId}
+          />
           <div className="flex-shrink-0 flex bg-gray-600 p-2">
             <div className="flex items-center justify-between w-full">
               <span className="text-gray-300 text-sm">

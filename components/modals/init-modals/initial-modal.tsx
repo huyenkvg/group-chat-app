@@ -14,6 +14,7 @@ import { InputField } from "@/components/RHF/RHFInputField";
 import { FileUpload } from "@/components/ui/file-upload";
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -35,6 +36,7 @@ const InitialModal = () => {
     },
   });
 
+  const { toast } = useToast();
   const { isSubmitting } = methods.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -51,17 +53,38 @@ const InitialModal = () => {
         throw new Error("Failed to create server");
       }
       setOpenModal(false);
+      const data = await response.json();
       methods.reset();
-      console.log("Server created successfully");
+      toast({
+        duration: 3000,
+        title: "Server created successfully",
+        description: "You can now join your server",
+        action: (
+          <Button
+            variant="outline"
+            onClick={() => {
+              router.push(`/servers/${data?.server?.id}`);
+            }}
+          >
+            Go to servers
+          </Button>
+        ),
+      });
       router.refresh();
     } catch (error) {
       console.error("Error creating server:", error);
+      toast({
+        duration: 3000,
+        title: "Error creating server",
+        description: "Please try again",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <>
-      <Button className='bg-indigo-500' onClick={() => setOpenModal(true)}>
+      <Button className="bg-indigo-500" onClick={() => setOpenModal(true)}>
         <Plus className="w-4 h-4 mr-3" />
         Create Server
       </Button>
@@ -71,6 +94,9 @@ const InitialModal = () => {
         open={openModal}
         dialogProps={{
           onOpenChange: (open) => {
+            if (!open) {
+              methods.reset();
+            }
             setOpenModal(open);
           },
         }}
